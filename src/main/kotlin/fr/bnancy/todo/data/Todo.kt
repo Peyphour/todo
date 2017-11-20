@@ -14,5 +14,6 @@ data class Todo(
         var title: String = "",
         var description: String = "",
         var dueDate: Date = Date.from(Instant.now()),
-        var priority: TodoPriority = TodoPriority.NORMAL
+        var priority: TodoPriority = TodoPriority.NORMAL,
+        var status: TodoStatus = TodoStatus.TODO
 )

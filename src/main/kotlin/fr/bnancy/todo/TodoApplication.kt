@@ -1,4 +1,4 @@
-package fr.bnancy.todo.repositories
+package fr.bnancy.todo
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication

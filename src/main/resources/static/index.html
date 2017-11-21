@@ -10,61 +10,31 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 </head>
 <body>
-<div id="projects"></div>
+<div id="root" class="container"></div>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+<script id="project-template" type="text/x-handlebars-template">
+    {{#each this}}
+    <div class="row">
+        <h1>{{title}}</h1>
+        <div class="col-sm-3">
+            TODO
+            {{#each todos}}
+                <span>{{dueDate}}</span>
+            {{/each}}
+        </div>
+    </div>
+    {{/each}}
+</script>
 <script>
-    var json = JSON.stringify;
-    var ajax = function(endpoint, method, data, callback, contentType) {
-        $.ajax({
-            url: endpoint.startsWith('http') ? endpoint : 'api/' + endpoint,
-            method: method,
-            data: contentType === undefined ? json(data) : data,
-            contentType: contentType === undefined ? 'application/json' : contentType,
-            success: callback
-        })
-    };
-
-    const GET = 'GET', POST = 'POST', PATCH = 'PATCH', PUT = 'PUT';
-    const TODOS = 'todos', PROJECTS = 'projects'
-
-    var API = {
-        getProjects: function(callback) {
-            ajax(PROJECTS, GET, null, callback)
-        },
-        getProject: function(project, callback) {
-            ajax(project._links.self.href, GET, null, callback)
-        },
-        getProjectTodos: function(project, callback) {
-            ajax(project._links.todos.href, GET, null, callback)
-        },
-        addProject: function(project, callback) {
-            ajax(PROJECTS, POST, project, callback)
-        },
-        getTodos: function(callback) {
-            ajax(TODOS, GET, null, callback)
-        },
-        addTodo: function(todo, callback) {
-            ajax(TODOS, POST, todo, callback)
-        },
-        addTodoToProject: function(project, todo, callback) {
-            ajax(project._links.todos.href, PATCH, todo._links.self.href, callback, 'text/uri-list')
-        },
-        removeTodoFromProject: function(project, todo, callback) {
-            var newTodoList = ''
-            this.getProjectTodos(project, function(body) {
-                for(var i = 0; i < body._embedded.todos.length; i++) {
-                    if(body._embedded.todos[i]._links.self.href !== todo._links.self.href)
-                        newTodoList += body._embedded.todos[i]._links.self.href + '\n'
-                }
-                ajax(project._links.todos.href, PUT, newTodoList, callback, 'text/uri-list')
-            })
-        }
-    };
+    APP.init()
 </script>
 </body>
 </html>

@@ -1,7 +1,22 @@
 var APP = {
     projectLoadStatus: [],
+    processTemplate: function (container, template_name, data) {
+        $('#' + container).html(Handlebars.compile($('#' + template_name).html())(data))
+    },
     init: function() {
-        API.getProjects(this.projectsLoaded)
+        window.onhashchange = APP.dispatch
+        APP.dispatch()
+    },
+    dispatch: function() {
+        switch(location.hash) {
+            case '':
+            case '#':
+                APP.processTemplate('root', 'default-template')
+                break;
+            case '#projects':
+                API.getProjects(APP.projectsLoaded)
+                break;
+        }
     },
     projectsLoaded: function(projects) {
         for(var i = 0; i < projects._embedded.projects.length; i++) {
@@ -21,6 +36,6 @@ var APP = {
             if(APP.projectLoadStatus[i] === false)
                 return
         }
-        $("#root").html(Handlebars.compile($("#project-template").html())(projects._embedded.projects))
+        APP.processTemplate('root', 'project-template', projects._embedded.projects)
     }
 }

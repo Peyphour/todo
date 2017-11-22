@@ -38,6 +38,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+<script src="https://momentjs.com/downloads/moment.min.js"></script>
 <script src="js/api.js"></script>
 <script src="js/app.js"></script>
 <script id="default-template" type="text/x-handlebars-template">
@@ -57,7 +58,7 @@
             <div class="row">TODO</div>
             {{#each todos}}
                 {{#equals status "TODO"}}
-                    {{description}}<br />
+                    {{description}} {{date dueDate}}<br />
                 {{/equals}}
             {{/each}}
         </div>
@@ -65,7 +66,7 @@
             <div class="row">DOING</div>
             {{#each todos}}
                 {{#equals status "DOING"}}
-                    {{description}}<br />
+                    {{description}} {{date dueDate}}<br />
                 {{/equals}}
             {{/each}}
         </div>
@@ -73,7 +74,7 @@
             <div class="row">DONE</div>
             {{#each todos}}
                 {{#equals status "DONE"}}
-                    {{description}}<br />
+                    {{description}} {{date dueDate}}<br />
                 {{/equals}}
             {{/each}}
         </div>
@@ -81,7 +82,7 @@
             <div class="row">CANCELED</div>
             {{#each todos}}
                 {{#equals status "CANCELED"}}
-                    {{description}}<br />
+                    {{description}} {{date dueDate}}<br />
                 {{/equals}}
             {{/each}}
         </div>

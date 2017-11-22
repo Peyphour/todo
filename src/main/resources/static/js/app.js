@@ -15,6 +15,9 @@ var APP = {
             else
                 return opts.inverse(this);
         })
+        Handlebars.registerHelper("date", function(datetime) {
+            return moment(datetime).calendar()
+        })
     },
     dispatch: function() {
         switch(location.hash) {

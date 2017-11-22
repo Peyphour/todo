@@ -24,6 +24,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="#projects">Projects</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#create-project">Create project</a>
+            </li>
         </ul>
     </div>
 </nav>
@@ -40,18 +43,57 @@
 <script id="default-template" type="text/x-handlebars-template">
     <a href="#projects">Load projects</a>
 </script>
-<script id="project-template" type="text/x-handlebars-template">
+<script id="project-list-template" type="text/x-handlebars-template">
     {{#each this}}
     <div class="row">
-        <h1>{{title}}</h1>
+        <a href="#project_-_{{title}}">Go to project {{title}}</a>
+    </div>
+    {{/each}}
+</script>
+<script id="project-template" type="text/x-handlebars-template">
+    <h1>{{projectName}}</h1>
+    <div class="row">
         <div class="col-sm-3">
-            TODO
+            <div class="row">TODO</div>
             {{#each todos}}
-                <span>{{dueDate}}</span>
+                {{#equals status "TODO"}}
+                    {{description}}<br />
+                {{/equals}}
+            {{/each}}
+        </div>
+        <div class="col-sm-3">
+            <div class="row">DOING</div>
+            {{#each todos}}
+                {{#equals status "DOING"}}
+                    {{description}}<br />
+                {{/equals}}
+            {{/each}}
+        </div>
+        <div class="col-sm-3">
+            <div class="row">DONE</div>
+            {{#each todos}}
+                {{#equals status "DONE"}}
+                    {{description}}<br />
+                {{/equals}}
+            {{/each}}
+        </div>
+        <div class="col-sm-3">
+            <div class="row">CANCELED</div>
+            {{#each todos}}
+                {{#equals status "CANCELED"}}
+                    {{description}}<br />
+                {{/equals}}
             {{/each}}
         </div>
     </div>
-    {{/each}}
+</script>
+<script id="new-project-template" type="text/x-handlebars-template">
+    <div class="form-group">
+        <label for="new-project-name">Project name:</label>
+        <input type="text" name="name" id="new-project-name"/>
+        <button class="btn btn-primary" onclick="APP.newProject()">Submit</button>
+        <div id="new-project-feedback"></div>
+    </div>
 </script>
 <script>
     APP.init()

@@ -8,7 +8,6 @@ var APP = {
     init: function() {
         window.onhashchange = APP.dispatch
         APP.dispatch()
-
         Handlebars.registerHelper("equals", function(a, b, opts) {
             if(a === b) // Or === depending on your needs
                 return opts.fn(this);
@@ -23,13 +22,11 @@ var APP = {
         switch(location.hash) {
             case '':
             case '#':
-                APP.processTemplate('root', 'default-template')
-                break;
-            case '#projects':
                 API.getProjects(APP.projectsLoaded)
-                break;
+                return;
             case '#create-project':
                 APP.processTemplate('root', 'new-project-template')
+                return;
         }
         if(location.hash.startsWith("#project_-_")) {
             var projectName = decodeURI(location.hash.split('_-_')[1])
@@ -41,6 +38,8 @@ var APP = {
                     todos: body._embedded.todos
                 })
             })
+        } else { // 404
+            location.hash = '';
         }
     },
     projectsLoaded: function(projects) {
@@ -62,7 +61,7 @@ var APP = {
             if(APP.projectLoadStatus[i] === false)
                 return
         }
-        APP.processTemplate('root', 'project-list-template', projects._embedded.projects)
+        APP.processTemplate('root', 'default-template', projects._embedded.projects)
     },
     newProject: function() {
         API.addProject({

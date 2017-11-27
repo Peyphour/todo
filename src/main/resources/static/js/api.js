@@ -48,5 +48,11 @@ var API = {
         ajax(link, PATCH, {
             status: status
         }, callback)
+    },
+    getTodosBetween: function(start, end, callback) {
+        ajax(TODOS + '/search/findByDueDateBetween', GET, $.param({
+            before: start,
+            after: end
+        }), callback, "text/plain")
     }
 };

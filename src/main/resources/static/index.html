@@ -20,6 +20,14 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Projects
+                </a>
+                <div class="dropdown-menu" id="projects-dropdown">
+
+                </div>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="#create-project">Create project</a>
             </li>
@@ -40,10 +48,35 @@
 <script src="js/api.js"></script>
 <script src="js/app.js"></script>
 <script id="default-template" type="text/x-handlebars-template">
-    {{#each this}}
+    <h3>What to do today ?</h3>
     <div class="row">
-        <a href="#project_-_{{title}}">Go to project {{title}}</a>
+        {{#each todos}}
+            {{#equals status "TODO"}}
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">{{title}}</h4>
+                        <p class="card-text">{{description}}</p>
+                        <p class="card-text">{{capitalizeFirstLetter status}}</p>
+                        <a href='javascript:' onclick="APP.changeTodoStatus('{{_links.self.href}}', 'DOING', APP.init)" class="card-link">Doing</a>
+                    </div>
+                </div>
+            {{/equals}}
+            {{#equals status "DOING"}}
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">{{title}}</h4>
+                        <p class="card-text">{{description}}</p>
+                        <p class="card-text">{{capitalizeFirstLetter status}}</p>
+                        <a href='javascript:' onclick="APP.changeTodoStatus('{{_links.self.href}}', 'DONE', APP.init)" class="card-link">Done</a>
+                    </div>
+                </div>
+            {{/equals}}
+        {{/each}}
     </div>
+</script>
+<script id="projects-list-template" type="text/x-handlebars-template">
+    {{#each this}}
+        <a class="dropdown-item" href="#project_-_{{title}}">{{title}}</a>
     {{/each}}
 </script>
 <script id="project-template" type="text/x-handlebars-template">
@@ -59,7 +92,7 @@
                             <h4 class="card-title">{{title}}</h4>
                             <p class="card-text">{{description}}</p>
                             <p class="card-text">Due for : {{date dueDate}}</p>
-                            <a href='javascript:' class="card-link" onclick="APP.changeTodoStatus('{{_links.self.href}}', 'DOING')">Start</a>
+                            <a href='javascript:' class="card-link" onclick="APP.changeTodoStatus('{{_links.self.href}}', 'DOING', APP.loadCurrentProjectTodos)">Start</a>
                         </div>
                     </div>
                 {{/equals}}
@@ -74,8 +107,8 @@
                             <h4 class="card-title">{{title}}</h4>
                             <p class="card-text">{{description}}</p>
                             <p class="card-text">Due for : {{date dueDate}}</p>
-                            <a href='javascript:' class="card-link" onclick="APP.changeTodoStatus('{{_links.self.href}}', 'DONE')">Done</a>
-                            <a href='javascript:' class="card-link" onclick="APP.changeTodoStatus('{{_links.self.href}}', 'CANCELED')">Cancel</a>
+                            <a href='javascript:' class="card-link" onclick="APP.changeTodoStatus('{{_links.self.href}}', 'DONE', APP.loadCurrentProjectTodos)">Done</a>
+                            <a href='javascript:' class="card-link" onclick="APP.changeTodoStatus('{{_links.self.href}}', 'CANCELED', APP.loadCurrentProjectTodos)">Cancel</a>
                         </div>
                     </div>
                 {{/equals}}
@@ -104,7 +137,7 @@
                             <h4 class="card-title">{{title}}</h4>
                             <p class="card-text">{{description}}</p>
                             <p class="card-text">Due for : {{date dueDate}}</p>
-                            <a href='javascript:' class="card-link" onclick="APP.changeTodoStatus('{{_links.self.href}}', 'DOING')">Start</a>
+                            <a href='javascript:' class="card-link" onclick="APP.changeTodoStatus('{{_links.self.href}}', 'DOING', APP.loadCurrentProjectTodos)">Start</a>
                         </div>
                     </div>
                 {{/equals}}

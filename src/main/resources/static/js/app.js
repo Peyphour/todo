@@ -36,12 +36,16 @@ var APP = {
                 sameElse: 'DD/MM/YYYY'
             })
         })
+        Handlebars.registerHelper("capitalizeFirstLetter", function(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
+        })
     },
     dispatch: function() {
         switch(location.hash) {
             case '':
             case '#':
                 API.getProjects(APP.projectsLoaded)
+                APP.getTodayTodos()
                 return;
             case '#create-project':
                 APP.processTemplate('root', 'new-project-template')
@@ -66,7 +70,7 @@ var APP = {
             APP.projectLoadStatus[i] = false;
             APP.projects.set(projects._embedded.projects[i].title, projects._embedded.projects[i]);
         }
-        APP.processTemplate('root', 'default-template', projects._embedded.projects)
+        APP.processTemplate('projects-dropdown', 'projects-list-template', projects._embedded.projects)
     },
     loadCurrentProjectTodos: function() {
         API.getProjectTodos(APP.currentProject, function(body) {
@@ -99,7 +103,17 @@ var APP = {
             })
         })
     },
-    changeTodoStatus: function(link, status) {
-        API.changeTodoStatus(link, status, APP.loadCurrentProjectTodos)
+    changeTodoStatus: function(link, status, callback) {
+        API.changeTodoStatus(link, status, callback)
+    },
+    getTodayTodos: function() {
+        var now = moment().format('YYYY-MM-DD');
+        var tomorrow = moment().add(1, 'day').format('YYYY-MM-DD')
+        API.getTodosBetween(now, tomorrow, APP.todayTodosLoaded)
+    },
+    todayTodosLoaded: function(todos) {
+        APP.processTemplate('root', 'default-template', {
+            todos: todos._embedded.todos
+        })
     }
 }

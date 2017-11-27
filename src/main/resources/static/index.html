@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Hello, world!</title>
+    <title>Todo app</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -9,6 +9,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/pikaday.css">
+    <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -46,59 +47,106 @@
     {{/each}}
 </script>
 <script id="project-template" type="text/x-handlebars-template">
-    <h1>{{projectName}}</h1>
+    <h2>Project {{projectName}}</h2>
+    <a class="btn btn-primary float-right" href="#new-todo">New todo</a>
     <div class="row">
-        <div class="col-sm-3">
-            <div class="row">TODO</div>
+        <div class="col-sm-3 todo-column">
+            <h4>TODO</h4>
             {{#each todos}}
                 {{#equals status "TODO"}}
-                    {{description}} {{date dueDate}}<br />
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">{{title}}</h4>
+                            <p class="card-text">{{description}}</p>
+                            <p class="card-text">Due for : {{date dueDate}}</p>
+                            <a href='javascript:' class="card-link" onclick="APP.changeTodoStatus('{{_links.self.href}}', 'DOING')">Start</a>
+                        </div>
+                    </div>
                 {{/equals}}
             {{/each}}
         </div>
-        <div class="col-sm-3">
-            <div class="row">DOING</div>
+        <div class="col-sm-3 todo-column">
+            <h4>DOING</h4>
             {{#each todos}}
                 {{#equals status "DOING"}}
-                    {{description}} {{date dueDate}}<br />
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">{{title}}</h4>
+                            <p class="card-text">{{description}}</p>
+                            <p class="card-text">Due for : {{date dueDate}}</p>
+                            <a href='javascript:' class="card-link" onclick="APP.changeTodoStatus('{{_links.self.href}}', 'DONE')">Done</a>
+                            <a href='javascript:' class="card-link" onclick="APP.changeTodoStatus('{{_links.self.href}}', 'CANCELED')">Cancel</a>
+                        </div>
+                    </div>
                 {{/equals}}
             {{/each}}
         </div>
-        <div class="col-sm-3">
-            <div class="row">DONE</div>
+        <div class="col-sm-3 todo-column">
+            <h4>DONE</h4>
             {{#each todos}}
                 {{#equals status "DONE"}}
-                    {{description}} {{date dueDate}}<br />
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">{{title}}</h4>
+                            <p class="card-text">{{description}}</p>
+                            <p class="card-text">Due for : {{date dueDate}}</p>
+                        </div>
+                    </div>
                 {{/equals}}
             {{/each}}
         </div>
-        <div class="col-sm-3">
-            <div class="row">CANCELED</div>
+        <div class="col-sm-3 todo-column">
+            <h4>CANCELED</h4>
             {{#each todos}}
                 {{#equals status "CANCELED"}}
-                    {{description}} {{date dueDate}}<br />
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">{{title}}</h4>
+                            <p class="card-text">{{description}}</p>
+                            <p class="card-text">Due for : {{date dueDate}}</p>
+                            <a href='javascript:' class="card-link" onclick="APP.changeTodoStatus('{{_links.self.href}}', 'DOING')">Start</a>
+                        </div>
+                    </div>
                 {{/equals}}
             {{/each}}
         </div>
     </div>
 </script>
 <script id="new-project-template" type="text/x-handlebars-template">
-    <div class="form-group">
-        <label for="new-project-name">Project name:</label>
-        <input type="text" name="name" id="new-project-name"/>
+    <div class="form-group row">
+        <label class="col-sm-2" for="new-project-name">Project name:</label>
+        <input class="form-control col-sm-8" type="text" name="name" id="new-project-name"/>
+    </div>
+    <div class="form-group row">
         <button class="btn btn-primary" onclick="APP.newProject()">Submit</button>
         <div id="new-project-feedback"></div>
     </div>
 </script>
 <script id="new-todo-template" type="text/x-handlebars-template">
-    <div class="form-group">
-        <label for="new-todo-name">Title</label>
-        <input type="text" name="new-todo-name" id="new-todo-name" />
-        <label for="new-todo-description">Description:</label>
-        <input type="text" name="new-todo-description" id="new-todo-description" />
-        <label for="new-todo-date">Due date:</label>
-        <input type="text" name="new-todo-date" id="new-todo-date" />
-    </div>
+    <form id="new-todo-form">
+        <h2>Add todo to {{projectName}}</h2>
+        <div class="form-group row">
+            <label class="col-sm-2" for="new-todo-name">Title</label>
+            <input class="form-control col-sm-8" type="text" name="title" id="new-todo-name" />
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2" for="new-todo-description">Description:</label>
+            <input class="form-control col-sm-8" type="text" name="description" id="new-todo-description" />
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2" for="new-todo-date">Due date:</label>
+            <input class="form-control col-sm-8" type="text" name="dueDate" id="new-todo-date" />
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2" for="new-todo-priority">Priority:</label>
+            <select class="form-control col-sm-8" name="priority" id="new-todo-priority">
+                <option value="LOW">Low</option>
+                <option value="NORMAL">Normal</option>
+                <option value="HIGH">High</option>
+            </select>
+        </div>
+        <button class="btn btn-primary" type="button" onclick="APP.newTodo()">Submit</button>
+    </form>
 </script>
 <script>
     APP.init()

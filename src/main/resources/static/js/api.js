@@ -43,5 +43,10 @@ var API = {
             }
             ajax(project._links.todos.href, PUT, newTodoList, callback, 'text/uri-list')
         })
+    },
+    changeTodoStatus: function(link, status, callback) {
+        ajax(link, PATCH, {
+            status: status
+        }, callback)
     }
 };
